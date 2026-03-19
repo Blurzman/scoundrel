@@ -1,7 +1,7 @@
 import type Card from "./Card"
 
 export default class Player{
-    private hp: number
+    private hp: number = 0
     private readonly maxHp: number = 20
     private weapon: Card | null = null
     private lastMonsterKilled: Card | null = null
@@ -39,10 +39,10 @@ export default class Player{
     public canUseWeaponAgainst(monster: Card): boolean{
         if (!this.weapon) return false
         if (this.lastMonsterKilled === null) return true
-        return monster.getRank() < this.weapon.getRank()
+        return this.lastMonsterKilled.getRank() > monster.getRank()
     }
 
-    public fightWithWeapon(monster: Card){
+    public fightWithWeapon(monster: Card): number | null{
         if (!this.canUseWeaponAgainst(monster)) {
             throw new Error("Can't use this weapong against that monster")
         }
