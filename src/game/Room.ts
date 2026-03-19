@@ -25,5 +25,8 @@ export default class Room{
 
     public removeCard(cardId: string): void {
         this.cards = this.cards.filter(c => c.id !== cardId)
-}
+    }
+    public restoreCards(cards: Card[]): void{
+        this.cards = cards
+    }
 }

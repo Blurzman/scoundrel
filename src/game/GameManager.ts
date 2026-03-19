@@ -77,6 +77,35 @@ export default class GameManager {
         return this.fled
     }
 
+    public getFullState() {
+        return {
+            deck: this.deck.getCards(),
+            room: this.room.getCards(),
+            hp: this.player.getHp(),
+            weapon: this.player.getWeapon(),
+            lastMonsterKilled: this.player.getLastDefeated(),
+            potionUsedThisRoom: this.player.getPotionUsedCurrentRoom(),
+            fled: this.fled,
+            status: this.status,
+            weaponKills: this.player.getWeaponKills()
+        }
+    }
+    
+    public restoreFullState(state: ReturnType<GameManager["getFullState"]>){
+        this.deck.restoreCards(state.deck)
+        this.room.restoreCards(state.room)
+        this.player.restoreState({
+            hp: state.hp,
+            weapon: state.weapon,
+            lastMonsterKilled: state.lastMonsterKilled,
+            potionUsedCurrentRoom: state.potionUsedThisRoom,
+            weaponKills: state.weaponKills
+        })
+        this.fled = state.fled
+        this.status = state.status
+        
+    }
+
     private checkRoomClear(){
         if (this.room.getCards().length === 1) {
             this.nextRoom()

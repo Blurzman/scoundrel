@@ -1,15 +1,24 @@
-import { useGame } from "../../hooks/useGame";
-import { getRankLabel, getSuitSymbol } from "../../Utils/cardUtils";
+import { useState } from "react";
+import { useGame } from "../../hooks/useGame";  
 import PlayerInfo from "../PlayerInfo/PlayerInfo";
+import RoomCards from "../RoomCards/RoomCards";
 
 export default function GameScreen(){
-    const { state, playCard, flee} = useGame()
+    const { state, playCard, flee, undo} = useGame()
+    const [useWeapon, setUseWeapon] = useState(true)
 
     if (state.status === "won"){
         return <div>You won!</div>
     }
     if (state.status === "lost"){
-        return <div>You lost!</div>
+        return (
+            <div>
+                <p>You lost!</p>
+                <button onClick={undo} disabled={!state.canUndo}>
+                  Deshacer
+                </button>
+            </div>
+        )
     }
 
     return (
@@ -23,16 +32,24 @@ export default function GameScreen(){
             <p>Remaining in deck {state.deckCount}</p>
 
             <div>
-                {state.room.map(card => (
-                    <button key={card.id} onClick={() => playCard(card.id)}>
-                        {getSuitSymbol(card.getSuit())} {getRankLabel(card.getRank())}
-                    </button>
-                ))}
+                <RoomCards
+                    cards={state.room}
+                    onPlay={playCard}
+                    canUseWeapon={state.canUseWeapon}
+                    useWeapon={useWeapon}
+                />
             </div>
 
+            <button onClick={() => setUseWeapon(!useWeapon)}>
+                Arma: {useWeapon ? "activada" : "desactivada"}
+            </button>
             
             <button onClick={flee} disabled={state.fled}>
                 flee
+            </button>
+
+            <button onClick={undo} disabled={!state.canUndo}>
+                  Deshacer
             </button>
         </div>
     )

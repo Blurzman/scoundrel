@@ -6,9 +6,11 @@ export default class Player{
     private weapon: Card | null = null
     private lastMonsterKilled: Card | null = null
     private potionUsedCurrentRoom: boolean = false
+    private weaponKills: Card[]
 
     constructor(startHp: number = 20){
         this.hp = startHp
+        this.weaponKills = []
     }
 
     public getHp(): number {
@@ -16,6 +18,9 @@ export default class Player{
     }
     public isAlive(): boolean {
         return (this.hp > 0)
+    }
+    public getPotionUsedCurrentRoom(): boolean {
+        return (this.potionUsedCurrentRoom)
     }
 
     public takeDamage(amount: number) {
@@ -34,6 +39,7 @@ export default class Player{
     public equipWeapon(card: Card) {
         this.weapon = card
         this.lastMonsterKilled = null
+        this.weaponKills = []
     }
 
     public canUseWeaponAgainst(monster: Card): boolean{
@@ -49,6 +55,7 @@ export default class Player{
         const damage = Math.max(0, monster.getRank() - this.weapon!.getRank())
         this.takeDamage(damage)
         this.lastMonsterKilled = monster
+        this.weaponKills.push()
         return damage
     }
 
@@ -64,6 +71,17 @@ export default class Player{
     
     public getLastDefeated(): Card | null {
         return this.lastMonsterKilled
+    }
+    public getWeaponKills(): Card[] {
+        return [...this.weaponKills]
+    }
+
+    public restoreState(state: {hp: number, weapon: Card | null, lastMonsterKilled: Card | null, potionUsedCurrentRoom: boolean, weaponKills: Card[]}) {
+        this.hp = state.hp
+        this.weapon = state.weapon
+        this.lastMonsterKilled = state.lastMonsterKilled
+        this.potionUsedCurrentRoom = state.potionUsedCurrentRoom
+        this.weaponKills = state.weaponKills
     }
 
 

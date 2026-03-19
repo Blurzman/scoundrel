@@ -46,4 +46,8 @@ export default class Deck{
     public isEmpty():boolean{
         return this.cards.length === 0
     }
+
+    public restoreCards(cards: Card[]):void {
+        this.cards = cards
+    }
 }
