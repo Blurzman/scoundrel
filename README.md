@@ -1,75 +1,115 @@
-# React + TypeScript + Vite
+# ♠ Scoundrel
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> *A dungeon crawler played with a deck of cards. No mercy. No second chances. Just you and the cards.*
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## What is this?
 
-## React Compiler
+**Scoundrel** is a single-player card game set in a dungeon. Each room presents four cards — monsters to fight, weapons to grab, potions to drink. You decide how to survive.
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+Built with React + TypeScript as a faithful implementation of the original pen-and-paper game by Zach Gage & Kurt Bieg.
 
-Note: This will impact Vite dev & build performances.
+---
 
-## Expanding the ESLint configuration
+## Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+| Layer | Tech |
+|---|---|
+| Framework | React 18 + TypeScript |
+| Build | Vite |
+| Styling | CSS Modules |
+| Tests | Vitest |
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## How to play
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+You start with **20 HP**. The dungeon is a shuffled deck dealt four cards at a time.
+
+| Card | What it does |
+|---|---|
+| ♠ ♣ Monster | Fight it bare-handed or with your weapon |
+| ♦ Weapon | Equip it to fight monsters |
+| ♥ Potion | Heal HP (once per room) |
+
+**Weapon rule** — you can only use your weapon against a monster with a *lower rank* than the last one you defeated with it. Chain kills keep your weapon sharp. Breaking the chain means fighting bare-handed.
+
+**Fleeing** — skip a room and put its cards back into the deck. You can't flee two rooms in a row.
+
+**Win** — clear the dungeon before the deck runs out.  
+**Lose** — reach 0 HP.
+
+---
+
+## Project structure
+
+```
+src/
+├── game/
+│   ├── Card.ts          # Card model (suit, rank, type)
+│   ├── Deck.ts          # 44-card deck, Fisher-Yates shuffle
+│   ├── Room.ts          # 4-card room management
+│   ├── Player.ts        # HP, weapon, potion logic
+│   └── GameManager.ts   # Game orchestration + state snapshots
+├── hooks/
+│   └── useGame.ts       # useReducer + undo history
+├── components/
+│   ├── GameScreen        # Main layout
+│   ├── RoomCards         # 4-card room display
+│   ├── CardComponent     # Spritesheet-based card renderer
+│   ├── WeaponArea        # Equipped weapon + kill stack
+│   ├── DeckPile          # Visual deck with depth layers
+│   ├── HpDisplay         # 20-frame animated health bar
+│   ├── PlayerInfo        # Weapon + last defeated card
+│   ├── BtnWeapon         # Weapon toggle
+│   ├── BtnFlee           # Flee action
+│   └── BtnUndo           # Undo last action
+└── utils/
+    ├── cardUtils.ts      # Rank labels, suit symbols
+    └── spriteUtils.ts    # Spritesheet positioning
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Getting started
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev
 ```
+
+```bash
+npm run test       # run unit + integration tests
+npm run build      # production build
+```
+
+---
+
+## Deck composition
+
+The standard deck has **44 cards** — a full deck minus the red face cards (J♥, Q♥, K♥, J♦, Q♦, K♦) and the A♥. This keeps the game balanced between threat and reward.
+
+---
+
+## Undo
+
+Every action is snapshotted before it executes. Hit undo to roll back one step. Undo history is cleared when you start a new game.
+
+---
+
+## Known limitations
+
+- Room cards currently shift when one is played — fixed-slot layout with `visibility: hidden` is in progress
+- No persistent high score or save state
+
+---
+
+## Credits
+
+Original game design by **Zach Gage** & **Kurt Bieg**  
+Original **Balatro** card assets by **LocalThunk**
+
+---
+
+*♠ ♣ ♦ ♥*
