@@ -1,0 +1,26 @@
+.btn {
+    width: 64px;
+    height: 64px;
+    border: none;
+    cursor: pointer;
+    background-color: transparent;
+    image-rendering: pixelated;
+    background-repeat: no-repeat;
+    background-image: url("../../assets/Back.png");
+    background-position: 0px 0px;
+    background-size: auto;
+}
+
+.btn:hover:not(.disabled) {
+    animation: undo 0.8s steps(8) infinite;
+}
+
+.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+@keyframes undo {
+    from { background-position: 0px 0px; }
+    to   { background-position: -512px 0px; }
+}

@@ -1,0 +1,17 @@
+.pile {
+    position: relative;
+    width: 71px;
+    height: 95px;
+}
+
+.card {
+    position: absolute;
+    image-rendering: pixelated;
+}
+
+.empty {
+    width: 71px;
+    height: 95px;
+    border: 2px dashed gray;
+    border-radius: 4px;
+}

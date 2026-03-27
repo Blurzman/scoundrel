@@ -1,0 +1,26 @@
+.btn {
+    width: 64px;
+    height: 64px;
+    border: none;
+    cursor: pointer;
+    background-color: transparent;
+    image-rendering: pixelated;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.active {
+    background-image: url("../../assets/WeaponOn.png");
+    background-position: 0px 0px;
+    animation: weaponOn 0.6s steps(5) infinite;
+}
+
+.inactive {
+    background-image: url("../../assets/WeaponOff.png");
+    background-position: 0px 0px;
+}
+
+@keyframes weaponOn {
+    from { background-position: 0px 0px; }
+    to   { background-position: -320px 0px; }
+}

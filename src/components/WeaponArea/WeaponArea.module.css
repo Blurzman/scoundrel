@@ -1,0 +1,24 @@
+.area {
+    position: relative;
+}
+
+.stack {
+    position: relative;
+    width: 71px;
+    height: 95px;
+}
+
+.kill {
+    position: absolute;
+}
+
+.weapon {
+    position: absolute;
+}
+
+.empty {
+    width: 71px;
+    height: 95px;
+    border: 2px dashed gray;
+    border-radius: 4px;
+}

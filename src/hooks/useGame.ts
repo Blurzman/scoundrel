@@ -3,31 +3,31 @@ import type Card from "../game/Card"
 import type { GameStatus } from "../game/GameManager"
 import GameManager from "../game/GameManager"
 
-
+/** Snapshot of the game state exposed to React components. */
 type GameState = {
-    status: GameStatus,
-    room: Card[],
-    hp: number,
-    weapon: Card | null,
-    lastDefeated: Card | null,
-    deckCount: number,
-    fled: boolean,
-    canUseWeapon: (card: Card) => boolean,
+    status: GameStatus
+    room: Card[]
+    hp: number
+    weapon: Card | null
+    lastDefeated: Card | null
+    deckCount: number
+    fled: boolean
+    /** Checks if the equipped weapon can be used against a given monster. */
+    canUseWeapon: (card: Card) => boolean
     canUndo: boolean
     weaponKills: Card[]
+    discardCount: number
 }
-type GameAction = 
+
+/** Actions that can be dispatched to update the game state. */
+type GameAction =
     | { type: "START_GAME" }
-    | { type: "PLAY_CARD"; cardId: string; useWeapon: boolean}
+    | { type: "PLAY_CARD"; cardId: string; useWeapon: boolean }
     | { type: "FLEE" }
-    | { type: "UNDO"}
+    | { type: "UNDO" }
 
+// Single GameManager instance shared across the hook's lifetime.
 const game = new GameManager()
-
-
-
-
-
 
 const initialState: GameState = {
     status: "idle",
@@ -39,12 +39,19 @@ const initialState: GameState = {
     fled: false,
     canUseWeapon: () => false,
     canUndo: false,
-    weaponKills: []
+    weaponKills: [],
+    discardCount: 0
 }
 
+/**
+ * Custom hook that connects the GameManager logic to React.
+ * Exposes the game state and actions to components.
+ */
 export function useGame() {
+    // Stores full game snapshots for undo functionality.
     const history = useRef<ReturnType<typeof game.getFullState>[]>([])
 
+    /** Reads the current GameManager state and returns it as a GameState object. */
     function getSnapshot(): GameState {
         return {
             status: game.getStatus(),
@@ -56,10 +63,15 @@ export function useGame() {
             fled: game.getFled(),
             canUseWeapon: (card: Card) => game.getPlayer().canUseWeaponAgainst(card),
             canUndo: history.current.length > 0,
-            weaponKills: game.getPlayer().getWeaponKills()
+            weaponKills: game.getPlayer().getWeaponKills(),
+            discardCount: game.getDiscardCount()
         }
     }
 
+    /**
+     * Handles all game actions, updates the GameManager and returns a new snapshot.
+     * Saves state to history before destructive actions to support undo.
+     */
     function reducer(_state: GameState, action: GameAction): GameState {
         switch (action.type) {
             case "START_GAME":
@@ -85,6 +97,7 @@ export function useGame() {
 
     const [state, dispatch] = useReducer(reducer, initialState)
 
+    // Starts the game automatically when the component mounts.
     useEffect(() => {
         dispatch({ type: "START_GAME" })
     }, [])

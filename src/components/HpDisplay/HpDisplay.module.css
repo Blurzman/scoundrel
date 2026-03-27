@@ -1,0 +1,20 @@
+.display {
+    width: 65px;
+    height: 65px;
+    image-rendering: pixelated;
+    background-image: url("../../assets/Health.png");
+    background-repeat: no-repeat;
+    background-size: auto;
+}
+
+.critical {
+    animation: shake 0.3s infinite;
+}
+
+@keyframes shake {
+    0%   { transform: translateX(0); }
+    25%  { transform: translateX(-3px); }
+    50%  { transform: translateX(3px); }
+    75%  { transform: translateX(-3px); }
+    100% { transform: translateX(0); }
+}

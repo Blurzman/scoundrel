@@ -1,0 +1,50 @@
+.table {
+    display: grid;
+    grid-template-columns: auto minmax(320px, 1fr) auto;
+    grid-template-rows: auto auto;
+    gap: 16px;
+    padding: 32px;
+    background-color: #5a8a3c;
+    min-height: 100vh;
+}
+
+.dungeon {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: center;
+}
+
+.room {
+    grid-column: 2;
+    grid-row: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.discard {
+    grid-column: 3;
+    grid-row: 1;
+    align-self: center;
+}
+
+.weapon {
+    grid-column: 2;
+    grid-row: 2;
+    display: flex;
+    justify-content: flex-start;
+    padding-left: 100px;
+    align-items: flex-start;
+    margin-top: -100x;
+}
+.actions {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+}
+.undo {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+}
